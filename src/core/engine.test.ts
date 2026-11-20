@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { act, advance, advanceBy, bonusFor, hydrate, MAX_OFFLINE_MS, newGame, TICK_MS } from './engine';
+import { act, advance, advanceBy, bonusFor, eraTitle, goalFor, hydrate, lifetimeWheels, MAX_OFFLINE_MS, newGame, reinvent, TICK_MS } from './engine';
+import { meta } from './meta';
 import stoneJson from '../../content/eras/stone.json';
 import { eras, loadEras } from './eras';
 import type { GameState } from './state';
@@ -84,5 +85,35 @@ describe('engine', () => {
     expect(h.eras.gone).toBeUndefined();
     expect(h.unlocked).toEqual(['stone']);
     expect(h.eras.stone).toHaveProperty('owned');
+  });
+});
+
+describe('reinvention (New Game+)', () => {
+  const finishAll = () => {
+    let s = newGame(eras, 0, 9);
+    for (const e of eras) {
+      (s.eras[e.id] as { made: number }).made = goalFor(s, e);
+      s = advanceBy(s, eras, TICK_MS);
+    }
+    return s;
+  };
+
+  it('is only possible once every era is complete', () => {
+    const s = newGame(eras, 0, 1);
+    expect(reinvent(s, eras)).toBe(s);
+    expect(finishAll().completed.length).toBe(eras.length);
+  });
+
+  it('resets eras, keeps a permanent multiplier, grows goals, renames eras', () => {
+    const s = reinvent(finishAll(), eras);
+    const stone = era('stone');
+    expect(s.reinventions).toBe(1);
+    expect(s.unlocked).toEqual(['stone']);
+    expect(s.completed).toEqual([]);
+    expect(s.eras.stone?.made).toBe(0);
+    expect(bonusFor(s, eras, stone)).toBe(meta.loopMultiplier);
+    expect(goalFor(s, stone)).toBe(Math.ceil(stone.goal.made * meta.goalGrowth));
+    expect(eraTitle(s, stone)).toBe(`${meta.prefixes[0]}${stone.name}`);
+    expect(lifetimeWheels(s)).toBe(lifetimeWheels(finishAll()));
   });
 });

@@ -1,0 +1,25 @@
+{
+  "loopMultiplier": 5,
+  "goalGrowth": 1.25,
+  "prefixes": [
+    "Neo-",
+    "Hyper-",
+    "Post-Post-",
+    "Artisanal ",
+    "Quantum ",
+    "Ultra-",
+    "Retro-Futurist ",
+    "Extremely "
+  ],
+  "button": "Reinvent the wheel. Again. From scratch.",
+  "endings": [
+    "You stand at the end of everything, holding a wheel. You realize you could do it better. You always could.",
+    "The multiverse is full of wheels. You look at one closely. Hm. Slightly lumpy. Back to the rocks.",
+    "A voice from the void asks: 'Haven't you done this already?' You pick up a rock anyway."
+  ],
+  "restarts": [
+    "Reinvention #{n} begins. You pick up a rock. You have a feeling about this rock. Again.",
+    "Reinvention #{n}. The cave apprentices look at you with deep, ancestral weariness.",
+    "Reinvention #{n}. History is a flat circle. Which, notably, is a wheel."
+  ]
+}
