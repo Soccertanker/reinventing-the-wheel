@@ -61,3 +61,40 @@ jobs:
           name: android-debug-apk
           path: android/app/build/outputs/apk/debug/*.apk
           retention-days: 7
+
+  deploy-web:
+    name: Deploy web (Cloudflare Pages)
+    needs: web
+    # Secrets aren't available to fork or Dependabot PRs; skip rather than fail.
+    if: >-
+      github.actor != 'dependabot[bot]' &&
+      (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Shows a "View deployment" link on the PR/commit; main = production, everything else = preview.
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PAGES_PROJECT: reinventing-the-wheel
+    steps:
+      # Deploy the exact files the web job built and tested.
+      - uses: actions/download-artifact@v5
+        with:
+          name: web-dist
+          path: dist
+      # Idempotent: creates the Pages project on the first ever run, no-op afterwards.
+      - name: Ensure Pages project exists
+        run: |
+          if ! npx --yes wrangler@4 pages project list | grep -qw "$PAGES_PROJECT"; then
+            npx --yes wrangler@4 pages project create "$PAGES_PROJECT" --production-branch main
+          fi
+      - name: Deploy
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }} --branch=${{ github.head_ref || github.ref_name }} --commit-hash=${{ github.event.pull_request.head.sha || github.sha }}
