@@ -1,0 +1,56 @@
+{
+  "loopSeconds": 60,
+  "mastery": 0.85,
+  "minMastery": 0.4,
+  "queueLimit": 3,
+  "items": {
+    "stones": "Stones",
+    "sharp": "Sharp Rock",
+    "log": "Log",
+    "disk": "Stone Disk",
+    "axle": "Axle",
+    "fire": "Fire (unrelated)"
+  },
+  "knowledge": {
+    "elder": "The elder said round things roll. You can now chisel stone disks.",
+    "kid": "The village kid owns a perfectly round rock. Kids just have stuff.",
+    "boulder": "The boulder is round. It rolls. You've been looking at this wrong.",
+    "painting": "Your cave painting of a wheel will confuse archaeologists for 5,000 years.",
+    "shortcut": "There's a shortcut to the forest behind the latrine. Chopping is faster from there.",
+    "prayer": "The Great Circle does not answer prayers. It is busy being round."
+  },
+  "tasks": [
+    { "id": "gather", "name": "Gather stones", "seconds": 6, "gives": { "items": { "stones": 2 } }, "text": "You gather two stones. They are not round. Yet." },
+    { "id": "sharpen", "name": "Sharpen a rock", "seconds": 7, "needs": { "items": { "stones": 1 } }, "consumes": { "stones": 1 }, "gives": { "items": { "sharp": 1 } }, "text": "You hit a rock with a rock until one of them is pointy." },
+    { "id": "chopHands", "name": "Chop a tree with your bare hands", "seconds": 16, "gives": { "items": { "log": 1 } }, "text": "You karate-chop a tree for sixteen seconds. It works, somehow." },
+    { "id": "chop", "name": "Chop a tree with the sharp rock", "seconds": 7, "needs": { "items": { "sharp": 1 } }, "gives": { "items": { "log": 1 } }, "text": "Timber!" },
+    { "id": "chopShortcut", "name": "Take the latrine shortcut and chop", "seconds": 4, "needs": { "items": { "sharp": 1 }, "knows": ["shortcut"] }, "gives": { "items": { "log": 1 } }, "text": "It smells terrible, but you're efficient now." },
+    { "id": "elder", "name": "Ask the elder for advice", "seconds": 8, "gives": { "knows": ["elder"] }, "text": "The elder mumbles: 'Round things... roll. I saw it once. In a dream. Or a mushroom.'" },
+    { "id": "kid", "name": "Play with the village kid", "seconds": 4, "gives": { "knows": ["kid"] }, "text": "The kid shows you their favorite toy: a perfectly round rock. You stare at it for a long time." },
+    { "id": "borrow", "name": "Borrow the kid's round rock", "seconds": 3, "once": true, "needs": { "knows": ["kid"] }, "gives": { "items": { "disk": 1 } }, "text": "'Borrow' is a strong word. The kid is crying. You'll give it back after the apocalypse." },
+    { "id": "chisel", "name": "Chisel a stone disk", "seconds": 16, "needs": { "items": { "stones": 2, "sharp": 1 }, "knows": ["elder"] }, "consumes": { "stones": 2 }, "gives": { "items": { "disk": 1 } }, "text": "Chip, chip, chip. It's... roughly round. Roundish. Round-adjacent." },
+    { "id": "axle", "name": "Whittle an axle", "seconds": 9, "needs": { "items": { "log": 1, "sharp": 1 } }, "consumes": { "log": 1 }, "gives": { "items": { "axle": 1 } }, "text": "A stick, but with purpose." },
+    { "id": "cart", "name": "Assemble the cart and flee", "seconds": 10, "needs": { "items": { "disk": 2, "axle": 1, "log": 1 } }, "consumes": { "disk": 2, "axle": 1, "log": 1 }, "win": "escape", "text": "You bolt two disks onto an axle, slap a log on top, and roll away just as the boulder hits. You have invented the wheel. And the getaway." },
+    { "id": "watch", "name": "Stare at the boulder", "seconds": 5, "afterSecond": 30, "gives": { "knows": ["boulder"] }, "text": "It's coming down the ridge. It is extremely round. It is rolling. A thought begins to form." },
+    { "id": "ride", "name": "Ride the boulder", "seconds": 2, "afterSecond": 50, "needs": { "knows": ["boulder", "elder"] }, "win": "secret", "text": "You leap onto the boulder as it arrives. It rolls. You roll with it, balancing on top. You have invented the wheel, the unicycle, and extreme sports. It was the boulder. It was always the boulder." },
+    { "id": "explore", "name": "Wander behind the latrine", "seconds": 6, "gives": { "knows": ["shortcut"] }, "text": "You find a shortcut to the forest. You also find out why nobody goes back here." },
+    { "id": "fire", "name": "Invent fire (unrelated)", "seconds": 8, "gives": { "items": { "fire": 1 } }, "text": "You invent fire. Huge, honestly. Not what you were supposed to be doing, though." },
+    { "id": "paint", "name": "Paint a wheel on the cave wall", "seconds": 10, "needs": { "items": { "fire": 1 }, "knows": ["elder"] }, "gives": { "knows": ["painting"] }, "text": "By firelight you paint a perfect circle. It is beautiful. It does not help with the boulder at all." },
+    { "id": "pray", "name": "Pray to the Great Circle", "seconds": 6, "gives": { "knows": ["prayer"] }, "text": "You pray. Nothing happens. In the distance, the boulder rumbles, unbothered." },
+    { "id": "nap", "name": "Take a nap", "seconds": 10, "text": "You dream of circles. Ten seconds gone. Worth it?" },
+    { "id": "run", "name": "Just run", "seconds": 12, "lose": true, "text": "You run. The boulder is faster. Boulders are always faster." }
+  ],
+  "deaths": [
+    "The boulder arrives. You are now a very flat caveman.",
+    "SQUISH. The village is now a pancake. A round pancake, at least.",
+    "The boulder rolls over you, your village, and your hopes. It doesn't even slow down.",
+    "Flattened. As you become two-dimensional, you notice the boulder's shape. Interesting...",
+    "The boulder wins. Again. It has never lost."
+  ],
+  "loopStarts": [
+    "You wake up. It's the same morning. The ground is already rumbling.",
+    "You wake up again. Your arms remember things your brain doesn't.",
+    "Same morning. Same rumble. Same elder, already mumbling about circles.",
+    "Loop #{n}. The kid waves at you. You wave back, already planning to steal their toy."
+  ]
+}
