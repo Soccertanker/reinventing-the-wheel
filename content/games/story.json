@@ -1,0 +1,512 @@
+{
+  "start": "slab",
+  "traits": {
+    "spin": "Spin",
+    "grip": "Grip",
+    "wander": "Wanderlust"
+  },
+  "nodes": [
+    {
+      "id": "slab",
+      "art": "🪵",
+      "when": "3500 BC · Mesopotamia",
+      "form": "A Slab of Wood",
+      "text": "You are a slab of wood. A potter named Ur-Nammu is looking at you sideways, the way people look at things they're about to change forever. You feel a strange urge to be... round.",
+      "choices": [
+        {
+          "text": "Spin. Just... spin.",
+          "to": "potter",
+          "traits": {
+            "spin": 1
+          }
+        },
+        {
+          "text": "Lie flat and look dependable.",
+          "to": "cart",
+          "traits": {
+            "grip": 1
+          }
+        },
+        {
+          "text": "Roll away. Freedom!",
+          "to": "runaway",
+          "traits": {
+            "wander": 1
+          }
+        },
+        {
+          "text": "Remember your past lives.",
+          "to": "remember",
+          "requiresEndings": 6
+        }
+      ]
+    },
+    {
+      "id": "potter",
+      "art": "🏺",
+      "when": "3000 BC · Ur",
+      "form": "A Potter's Wheel",
+      "text": "You are a potter's wheel. Every day, wet clay is slapped onto your face and you spin until it becomes a pot. It's honest work. The pots get all the credit.",
+      "choices": [
+        {
+          "text": "Spin faster. Become a blur.",
+          "to": "spinning",
+          "traits": {
+            "spin": 1
+          }
+        },
+        {
+          "text": "Dream of fortune and fame.",
+          "to": "roulette",
+          "traits": {
+            "wander": 1
+          }
+        },
+        {
+          "text": "Just make pots. Forever.",
+          "to": "end_pots"
+        }
+      ]
+    },
+    {
+      "id": "cart",
+      "art": "🛒",
+      "when": "3200 BC · Sumer",
+      "form": "A Cart Wheel",
+      "text": "Someone bolted you to an axle and a box. You are the first cart wheel. You carry grain, bricks, and once, a very confused goat. People cheer when you roll by. Nobody has cheered for wood before.",
+      "choices": [
+        {
+          "text": "Go faster. Much faster.",
+          "to": "chariot",
+          "traits": {
+            "spin": 1
+          }
+        },
+        {
+          "text": "Settle down on a farm.",
+          "to": "farm",
+          "traits": {
+            "grip": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "runaway",
+      "art": "🌊",
+      "when": "3500 BC · A Hill, Then a River",
+      "form": "A Runaway Disk",
+      "text": "You roll down a hill, through a market, past a very angry man with a sharpened rock, and into the Euphrates. The water is cold. You are, it turns out, buoyant.",
+      "choices": [
+        {
+          "text": "Float wherever the river takes you.",
+          "to": "waterwheel",
+          "traits": {
+            "wander": 1
+          }
+        },
+        {
+          "text": "Sink. Let the river keep you.",
+          "to": "end_atlantis"
+        }
+      ]
+    },
+    {
+      "id": "spinning",
+      "art": "🧶",
+      "when": "1350 AD · A Cottage",
+      "form": "A Spinning Wheel",
+      "text": "You are a spinning wheel. Wool goes in, yarn comes out. A small strange man keeps visiting at night, asking if you can do straw.",
+      "choices": [
+        {
+          "text": "Try spinning straw into gold.",
+          "to": "end_gold",
+          "traits": {
+            "spin": 1
+          }
+        },
+        {
+          "text": "Keep making yarn. Honest yarn.",
+          "to": "gear",
+          "traits": {
+            "grip": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "roulette",
+      "art": "🎰",
+      "when": "1796 · Paris",
+      "form": "A Roulette Wheel",
+      "text": "You are a roulette wheel. People throw their fortunes at you and watch you spin. You've never been more important, or more blamed.",
+      "choices": [
+        {
+          "text": "Rig yourself for the house.",
+          "to": "end_casino"
+        },
+        {
+          "text": "Go into show business.",
+          "to": "end_tv",
+          "traits": {
+            "wander": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "chariot",
+      "art": "🏛️",
+      "when": "50 BC · Rome",
+      "form": "A Chariot Wheel",
+      "text": "You are a racing chariot wheel in the Circus Maximus. The crowd roars. The horses don't know your name, but they respect you. You lap a senator.",
+      "choices": [
+        {
+          "text": "Win the big race.",
+          "to": "end_glory",
+          "traits": {
+            "spin": 1
+          }
+        },
+        {
+          "text": "Retire and go to sea.",
+          "to": "ship",
+          "traits": {
+            "wander": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "farm",
+      "art": "🐄",
+      "when": "1100 AD · A Dairy Farm",
+      "form": "A Farm Cart Wheel",
+      "text": "You roll milk to market every day. The farmer's wife looks at you, then at a vat of curdled milk, then back at you. She has an idea.",
+      "choices": [
+        {
+          "text": "Let her use you as a mold.",
+          "to": "cheese",
+          "traits": {
+            "grip": 1
+          }
+        },
+        {
+          "text": "Keep rolling. Change nothing.",
+          "to": "train",
+          "traits": {
+            "grip": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "waterwheel",
+      "art": "💧",
+      "when": "200 AD · A Roman Mill",
+      "form": "A Waterwheel",
+      "text": "The river delivered you to a mill. Now you turn all day in the current, grinding grain. You feel useful. You feel wet. Mostly wet.",
+      "choices": [
+        {
+          "text": "Turn faster. Power more things.",
+          "to": "gear",
+          "traits": {
+            "spin": 1
+          }
+        },
+        {
+          "text": "Break loose and see the world.",
+          "to": "ship",
+          "traits": {
+            "wander": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cheese",
+      "art": "🧀",
+      "when": "1200 AD · Still the Dairy Farm",
+      "form": "A Cheese Wheel",
+      "text": "You are no longer wood. You are cheese. A wheel of cheese. You don't know how this happened, metaphysically. You are aging beautifully.",
+      "choices": [
+        {
+          "text": "Age for 30 years. Become legend.",
+          "to": "end_legend",
+          "traits": {
+            "grip": 1
+          }
+        },
+        {
+          "text": "Travel to Naples.",
+          "to": "end_pizza",
+          "traits": {
+            "wander": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "gear",
+      "art": "⚙️",
+      "when": "1850 · Manchester",
+      "form": "A Gear",
+      "text": "You've grown teeth. You are a gear in a factory, one of thousands, all turning together. The noise is unbelievable. Somewhere, a man in a top hat is getting very rich.",
+      "choices": [
+        {
+          "text": "Join a clock. Keep time.",
+          "to": "end_clock",
+          "traits": {
+            "grip": 1
+          }
+        },
+        {
+          "text": "Join a locomotive. Go places.",
+          "to": "train",
+          "traits": {
+            "wander": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "ship",
+      "art": "🏴‍☠️",
+      "when": "1715 · The Caribbean",
+      "form": "A Ship's Wheel",
+      "text": "You've become a ship's wheel. Someone with one eye and strong opinions grips you every night. The sea is huge. You are steering it, sort of.",
+      "choices": [
+        {
+          "text": "Steer toward treasure.",
+          "to": "end_pirate",
+          "traits": {
+            "wander": 1
+          }
+        },
+        {
+          "text": "Steer toward the New World.",
+          "to": "ferris",
+          "traits": {
+            "spin": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "train",
+      "art": "🚂",
+      "when": "1869 · The Plains",
+      "form": "A Locomotive Wheel",
+      "text": "You are a steel train wheel, crossing a continent at the unthinkable speed of 30 mph. Cows stare. You stare back. You are going places, literally.",
+      "choices": [
+        {
+          "text": "Become a car tire.",
+          "to": "tire",
+          "traits": {
+            "grip": 1
+          }
+        },
+        {
+          "text": "Take a detour to the World's Fair.",
+          "to": "ferris",
+          "traits": {
+            "wander": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "ferris",
+      "art": "🎡",
+      "when": "1893 · Chicago World's Fair",
+      "form": "A Ferris Wheel",
+      "text": "You are enormous now: 80 meters tall, carrying 2,000 people at a time, in a circle, to nowhere. They love it. You don't understand why. You love it too.",
+      "choices": [
+        {
+          "text": "Keep going round.",
+          "to": "end_ferris",
+          "traits": {
+            "spin": 1
+          }
+        },
+        {
+          "text": "Break free and roll through Chicago.",
+          "to": "end_chicago",
+          "traits": {
+            "wander": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "tire",
+      "art": "🚗",
+      "when": "1965 · Route 66",
+      "form": "A Car Tire",
+      "text": "You are rubber now, wrapped around a hubcap, rolling down Route 66. The radio is on. You have never been this cool. A child in the back seat asks 'are we there yet' 400 times.",
+      "choices": [
+        {
+          "text": "Go to space.",
+          "to": "end_mars",
+          "traits": {
+            "wander": 1
+          }
+        },
+        {
+          "text": "Get a desk job.",
+          "to": "office",
+          "traits": {
+            "grip": 1
+          }
+        },
+        {
+          "text": "Run, but never arrive.",
+          "to": "end_hamster",
+          "traits": {
+            "spin": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "office",
+      "art": "💻",
+      "when": "2007 · An Office Park",
+      "form": "A Scroll Wheel",
+      "text": "You're tiny now: a scroll wheel on a computer mouse. Every day you scroll through spreadsheets. Sometimes the computer freezes, and you see something spinning on the screen. It looks like you.",
+      "choices": [
+        {
+          "text": "Become the spinning thing on the screen.",
+          "to": "end_beachball",
+          "traits": {
+            "spin": 2
+          }
+        },
+        {
+          "text": "Get fidgety.",
+          "to": "end_fidget",
+          "requires": {
+            "spin": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "remember",
+      "art": "🌀",
+      "when": "All Times at Once",
+      "form": "Every Wheel",
+      "text": "You remember. You were a pot-maker and a chariot, cheese and a casino, a ship's wheel and a beach ball. You realize that nobody ever reinvented you. They just kept finding you again.",
+      "choices": [
+        {
+          "text": "Let them find you one more time.",
+          "to": "end_enlightened"
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "id": "end_pots",
+      "art": "🏺",
+      "title": "The Pot Whisperer",
+      "text": "You make pots for 4,000 years. Museums are full of your work. The labels all credit someone else. You don't mind. You know."
+    },
+    {
+      "id": "end_atlantis",
+      "art": "🏛️",
+      "title": "Possibly a Lid",
+      "text": "You sink. Five thousand years later, divers find you. You end up in a museum, labeled 'circular object, possibly a lid'. You are not a lid. You are the first wheel."
+    },
+    {
+      "id": "end_gold",
+      "art": "🪙",
+      "title": "Rumpelwheelskin",
+      "text": "You spin straw into gold. Nobody can explain it. The small strange man takes the credit and a firstborn child. You decide not to get involved."
+    },
+    {
+      "id": "end_casino",
+      "art": "🎲",
+      "title": "The House Always Wins",
+      "text": "You become the house. The house always wins. You are rich, feared, and very slightly ashamed."
+    },
+    {
+      "id": "end_tv",
+      "art": "📺",
+      "title": "Spin to Win",
+      "text": "You become the big wheel on a daytime game show. Contestants slap you and scream. You've never been more famous. Nobody knows your name."
+    },
+    {
+      "id": "end_glory",
+      "art": "🏆",
+      "title": "Champion of Rome",
+      "text": "You win the race. A poet writes about you. Unfortunately he writes about the horses. History remembers the horses."
+    },
+    {
+      "id": "end_legend",
+      "art": "🧀",
+      "title": "The Legendary Cheese",
+      "text": "After 30 years of aging you are the finest cheese in Europe. Kings fight wars over slices of you. You are delicious, which is not something wheels usually get to be."
+    },
+    {
+      "id": "end_pizza",
+      "art": "🍕",
+      "title": "Pizza",
+      "text": "In Naples, a baker grates you over a flat round dough. You realize the pizza is also a wheel. You are a wheel on a wheel. You have reinvented yourself, deliciously."
+    },
+    {
+      "id": "end_clock",
+      "art": "🕰️",
+      "title": "The Wheel of Time",
+      "text": "You join the gears of a cathedral clock and keep time for 300 years. Tick. Tock. You are, literally, the wheel of time."
+    },
+    {
+      "id": "end_pirate",
+      "art": "💰",
+      "title": "Arrr",
+      "text": "You steer a pirate ship to a buried treasure that turns out to be another wheel. The captain is furious. You feel seen."
+    },
+    {
+      "id": "end_ferris",
+      "art": "🎡",
+      "title": "Round and Round",
+      "text": "You carry two million people in circles. Nobody goes anywhere. Everyone is happy. You think this might be the meaning of life."
+    },
+    {
+      "id": "end_chicago",
+      "art": "🌆",
+      "title": "The Great Chicago Roll",
+      "text": "You break free and roll through Chicago, down Michigan Avenue, into the lake. It's the most exciting day in the city's history. They name a pizza after you. It's deep-dish."
+    },
+    {
+      "id": "end_mars",
+      "art": "🪐",
+      "title": "First Wheel on Mars",
+      "text": "You're bolted onto a rover and launched into space. You are the first wheel on another planet. Red dust, two moons, no roads. You roll anyway. You're still a wheel. You're still proud."
+    },
+    {
+      "id": "end_hamster",
+      "art": "🐹",
+      "title": "The Hamster Wheel",
+      "text": "You become a hamster wheel. You run all night and go nowhere, and so does the hamster. You understand each other perfectly."
+    },
+    {
+      "id": "end_beachball",
+      "art": "🌈",
+      "title": "The Spinning Wheel of Waiting",
+      "text": "You become the spinning wait cursor. Millions of people stare at you, hating you. You spin anyway. It's what you do."
+    },
+    {
+      "id": "end_fidget",
+      "art": "🌀",
+      "title": "Fidget Spinner",
+      "text": "All that spin finally pays off. You become a fidget spinner: no purpose, pure spin. For six glorious months in 2017, you are the most popular wheel on Earth."
+    },
+    {
+      "id": "end_enlightened",
+      "art": "☸️",
+      "title": "You Were Always the Wheel",
+      "text": "A child somewhere picks up a round stone and rolls it, and smiles. You feel it, everywhere at once. You were never reinvented. You were remembered. THE END (for real this time)."
+    }
+  ]
+}
