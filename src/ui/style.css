@@ -91,6 +91,10 @@ ul.shop li button { flex: 0 0 auto; }
 .wheel-art path { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linejoin: round; transition: d 0.3s; }
 .wheel-art circle { fill: var(--accent); }
 .score { font-size: 1.3rem; font-weight: 600; }
+button.rock { display: block; margin: 12px auto; padding: 8px; border: none; border-radius: 50%; background: radial-gradient(circle, #ffffff10, transparent 70%); }
+button.rock .wheel-art { width: 180px; height: 180px; }
+button.rock .wheel-art path { stroke-width: 4; fill: #ffffff08; transition: none; }
+button.rock:active .wheel-art { transform: scale(0.95) rotate(4deg); }
 
 .mix { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 8px 0 4px; background: #3a3a40; }
 .mix > span { flex-basis: 0; transition: flex-grow 0.3s; }
