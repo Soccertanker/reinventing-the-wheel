@@ -1,0 +1,95 @@
+{
+  "id": "industrial",
+  "name": "Industrial Age",
+  "order": 2,
+  "mechanic": "assembly",
+  "tagline": "Steam, soot, and spokes. Mind the boiler.",
+  "intro": "Smoke on the horizon. Someone has built a factory whose only purpose is to reinvent the wheel. It is you. You built it.",
+  "goal": {
+    "made": 600,
+    "label": "Assemble 600 iron wheels"
+  },
+  "bonus": 1.5,
+  "accent": "#c8693c",
+  "params": {
+    "resources": {
+      "iron": "Iron",
+      "spokes": "Spokes",
+      "rims": "Rims"
+    },
+    "stages": [
+      {
+        "id": "smelt",
+        "name": "Smelting",
+        "machine": "Blast Furnace",
+        "inputs": {},
+        "output": "iron",
+        "outputQty": 1,
+        "rate": 1,
+        "baseCost": 15,
+        "costGrowth": 1.22
+      },
+      {
+        "id": "spokes",
+        "name": "Spoke Bending",
+        "machine": "Spoke Bender",
+        "inputs": {
+          "iron": 1
+        },
+        "output": "spokes",
+        "outputQty": 4,
+        "rate": 0.5,
+        "baseCost": 20,
+        "costGrowth": 1.22
+      },
+      {
+        "id": "rims",
+        "name": "Rim Rolling",
+        "machine": "Rim Roller",
+        "inputs": {
+          "iron": 2
+        },
+        "output": "rims",
+        "outputQty": 1,
+        "rate": 0.25,
+        "baseCost": 25,
+        "costGrowth": 1.22
+      },
+      {
+        "id": "assembly",
+        "name": "Wheel Assembly",
+        "machine": "Assembly Bench",
+        "inputs": {
+          "spokes": 12,
+          "rims": 1
+        },
+        "output": "wheel",
+        "outputQty": 1,
+        "rate": 0.2,
+        "baseCost": 40,
+        "costGrowth": 1.22
+      }
+    ],
+    "shovel": 12,
+    "steamPerMachine": 0.8,
+    "stoker": {
+      "name": "Coal Stoker",
+      "pressurePerSecond": 2.5,
+      "baseCost": 30,
+      "costGrowth": 1.35
+    },
+    "valveAt": 70,
+    "explosions": [
+      "KABOOM. The boiler has left the building. So has part of the building.",
+      "The boiler exploded. Health and Safety will be invented in roughly 100 years.",
+      "Boiler explosion! A worker's hat lands three towns over. It is round. Close enough?",
+      "The boiler made a noise like a kettle the size of a cathedral, and then it made a much louder one."
+    ],
+    "shovelQuips": [
+      "Your arms are getting enormous. Industrial-strength biceps.",
+      "Somewhere, a coal miner sighs with pride.",
+      "You've shoveled so much coal you are now 40% soot.",
+      "A child asks why you don't just buy a Coal Stoker. You pretend not to hear."
+    ]
+  }
+}

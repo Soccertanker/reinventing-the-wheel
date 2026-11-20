@@ -1,0 +1,65 @@
+{
+  "id": "stone",
+  "name": "Stone Age",
+  "order": 1,
+  "mechanic": "producers",
+  "tagline": "Hit rock with rock until it is round.",
+  "intro": "You pick up a rock. You have a feeling about this rock. It wants to be round.",
+  "goal": {
+    "made": 2000,
+    "label": "Chisel 2,000 stone wheels"
+  },
+  "bonus": 2,
+  "accent": "#d9a441",
+  "params": {
+    "clickLabel": "Reinvent the wheel",
+    "clickYield": 1,
+    "producers": [
+      {
+        "id": "chisel",
+        "name": "Sharper Rock",
+        "description": "A rock for hitting the other rock into a circle.",
+        "baseCost": 10,
+        "costGrowth": 1.15,
+        "wheelsPerSecond": 0.2,
+        "firstBuy": "You have invented the tool. You use it to reinvent the wheel. Priorities."
+      },
+      {
+        "id": "apprentice",
+        "name": "Cave Apprentice",
+        "description": "Hits rocks. Mostly the right ones.",
+        "baseCost": 60,
+        "costGrowth": 1.15,
+        "wheelsPerSecond": 1,
+        "firstBuy": "Your apprentice asks what a wheel is for. You do not know yet. Keep chiseling."
+      },
+      {
+        "id": "hill",
+        "name": "Rolling Hill",
+        "description": "Gravity-assisted quality control. If it rolls down, it's a wheel.",
+        "baseCost": 400,
+        "costGrowth": 1.15,
+        "wheelsPerSecond": 6,
+        "firstBuy": "A wheel rolled down the hill and was never seen again. It was the best one."
+      },
+      {
+        "id": "shaman",
+        "name": "Wheel Shaman",
+        "description": "Prays to the Great Circle. Results vary, but on average: wheels.",
+        "baseCost": 2500,
+        "costGrowth": 1.15,
+        "wheelsPerSecond": 30,
+        "firstBuy": "The Shaman declares the wheel sacred. Also declares the square cursed. Squares everywhere are nervous."
+      },
+      {
+        "id": "committee",
+        "name": "Wheel Committee",
+        "description": "Twelve elders debate whether the wheel should exist. Wheels are produced during breaks.",
+        "baseCost": 12000,
+        "costGrowth": 1.15,
+        "wheelsPerSecond": 120,
+        "firstBuy": "The Committee's first motion: rename 'wheel' to 'round rock'. Motion tabled. Wheels continue."
+      }
+    ]
+  }
+}

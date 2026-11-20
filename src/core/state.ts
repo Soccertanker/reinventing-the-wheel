@@ -1,21 +1,31 @@
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
+
+/** Every mechanic's per-era state has at least these. Everything else is mechanic-specific. */
+export interface MechanicState {
+  /** spendable wheels in this era */
+  wheels: number;
+  /** wheels ever made in this era (drives the era goal) */
+  made: number;
+}
+
+export interface LogEntry {
+  seq: number;
+  era: string;
+  msg: string;
+}
 
 export interface GameState {
   schemaVersion: typeof CURRENT_SCHEMA_VERSION;
-  wheels: number;
-  totalWheels: number;
-  /** producer id -> owned count */
-  owned: Record<string, number>;
   /** epoch ms of the last simulated moment; used for offline progress */
   lastTickAt: number;
-}
-
-export function newGame(now: number): GameState {
-  return {
-    schemaVersion: CURRENT_SCHEMA_VERSION,
-    wheels: 0,
-    totalWheels: 0,
-    owned: {},
-    lastTickAt: now,
-  };
+  /** simulated time not yet consumed by a fixed tick */
+  pendingMs: number;
+  rngSeed: number;
+  currentEra: string;
+  unlocked: string[];
+  completed: string[];
+  /** era id -> that era's mechanic state */
+  eras: Record<string, MechanicState>;
+  log: LogEntry[];
+  logSeq: number;
 }

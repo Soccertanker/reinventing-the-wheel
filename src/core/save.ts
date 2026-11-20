@@ -9,7 +9,19 @@ import { CURRENT_SCHEMA_VERSION, type GameState } from './state';
  */
 type AnySave = { schemaVersion: number } & Record<string, unknown>;
 export const migrations: Record<number, (s: AnySave) => AnySave> = {
-  // 1: (s) => ({ ...s, schemaVersion: 2, newField: defaultValue }),
+  // v1 (single Stone Age) -> v2 (multiple eras, each with its own mechanic state)
+  1: (s) => ({
+    schemaVersion: 2,
+    lastTickAt: s.lastTickAt,
+    pendingMs: 0,
+    rngSeed: 0x5eed,
+    currentEra: 'stone',
+    unlocked: ['stone'],
+    completed: [],
+    eras: { stone: { wheels: s.wheels, made: s.totalWheels, owned: s.owned } },
+    log: [],
+    logSeq: 0,
+  }),
 };
 
 export function serialize(state: GameState): string {

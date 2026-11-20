@@ -1,0 +1,77 @@
+{
+  "id": "cosmic",
+  "name": "Cosmic",
+  "order": 5,
+  "mechanic": "cosmos",
+  "tagline": "Set the constants. Big Bang. Wait for someone, somewhere, to invent the wheel.",
+  "intro": "Your model went post-singular and took you with it. You are now a vast intelligence that creates universes. You still want wheels. Some things never change.",
+  "goal": {
+    "made": 200000000,
+    "label": "Make the multiverse produce 200 million wheels"
+  },
+  "bonus": 1,
+  "accent": "#ff6fb5",
+  "params": {
+    "gyPerSecond": 0.5,
+    "baseLifespanGy": 60,
+    "starsAtGy": 0.4,
+    "lifeAtGy": 4,
+    "civsAtGy": 6,
+    "maxCivs": 1000000,
+    "civGrowth": 0.6,
+    "wheelsPerCiv": 0.002,
+    "piTolerance": 0.003,
+    "gravityTolerance": 0.35,
+    "insightPerLog": 0.5,
+    "pump": {
+      "name": "Entropy Pump",
+      "baseCost": 500,
+      "costGrowth": 3,
+      "speedup": 1.5
+    },
+    "daemon": {
+      "name": "Multiverse Daemon",
+      "cost": 20000
+    },
+    "milestones": [
+      {
+        "age": 0.01,
+        "text": "Let there be light. (Light: 'finally.')"
+      },
+      {
+        "age": 0.4,
+        "text": "The first stars ignite. They are round. A good omen."
+      },
+      {
+        "age": 4,
+        "text": "Life emerges. It is squishy and not yet interested in wheels."
+      },
+      {
+        "age": 6,
+        "text": "A civilization invents the wheel! Then immediately argues about who invented it."
+      },
+      {
+        "age": 15,
+        "text": "Thousands of civilizations are reinventing the wheel. None have met. All are smug about it."
+      },
+      {
+        "age": 40,
+        "text": "Late-universe civilizations publish think pieces: 'Do We Even Need Wheels?' Yes. Yes you do."
+      }
+    ],
+    "badPi": [
+      "Warning: with this value of pi, circles close a bit early. Civilizations will invent hexagons.",
+      "Pi is off. Every wheel in this universe will have corners. They will call it 'rustic'.",
+      "Bold choice of pi. Mathematicians in this universe will be very confused and very angry."
+    ],
+    "noStars": [
+      "This universe will collapse before the first star. It's very dark and very short. Like a haiku.",
+      "Gravity this extreme means the universe crunches almost immediately. Nobody gets to invent anything."
+    ],
+    "deaths": [
+      "The universe ends in heat death. The last civilization's final act: polishing a wheel.",
+      "Big Crunch. Everything returns to a single point, which is, technically, very round.",
+      "The universe fades out. Somewhere, a wheel keeps rolling into the dark. Forever."
+    ]
+  }
+}
