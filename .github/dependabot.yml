@@ -5,6 +5,14 @@ updates:
     schedule: { interval: weekly }
     groups:
       dev-deps: { dependency-type: development }
+    ignore:
+      # Keep Node type definitions on the same major as the runtime in .nvmrc.
+      # Bump them manually when .nvmrc changes.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly }
+    # One PR for all action bumps instead of one per action.
+    groups:
+      actions: { patterns: ['*'] }
