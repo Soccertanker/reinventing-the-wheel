@@ -39,6 +39,7 @@ nav#tabs { display: flex; gap: 4px; overflow-x: auto; padding: 8px 0; scrollbar-
 .bonus { color: var(--accent); }
 .welcome { text-align: center; border: 1px solid var(--accent); }
 .welcome p { margin: 0.4rem 0; }
+.reinvent { text-align: center; border: 1px solid var(--accent); }
 
 button {
   font: inherit;
