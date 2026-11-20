@@ -4,6 +4,7 @@ import { makeRng } from '../rng';
 import { assembly, MAX_PRESSURE, type AssemblyParams } from './assembly';
 import { cosmos, piQuality, type CosmosParams } from './cosmos';
 import { lab, trueScore, type LabParams } from './lab';
+import { chisel, cornersPerTap, type ChiselParams } from './chisel';
 import { producers, type ProducersParams } from './producers';
 import { outcomes, training, type TrainingParams } from './training';
 import type { Ctx } from './types';
@@ -18,8 +19,15 @@ function run<S>(m: { tick: (s: S, c: never, dt: number, x: Ctx) => void }, s: S,
   for (let t = 0; t < seconds * 4; t++) m.tick(s, c as never, 0.25, x);
 }
 
-describe('producers (Stone Age)', () => {
-  const c = cfg<ProducersParams>('stone');
+describe('producers', () => {
+  const c = producers.validate(
+    {
+      clickLabel: 'Click',
+      clickYield: 1,
+      producers: [{ id: 'chisel', name: 'R', description: 'd', baseCost: 10, costGrowth: 1.15, wheelsPerSecond: 0.2, firstBuy: 'x' }],
+    },
+    'test',
+  ) as ProducersParams;
   it('click, buy, produce', () => {
     const s = producers.init(c);
     for (let i = 0; i < 10; i++) producers.act(s, c, { type: 'click' }, ctx());
@@ -127,5 +135,26 @@ describe('cosmos (Cosmic)', () => {
     cosmos.act(s, c, { type: 'crunch' }, ctx());
     expect(s.insight).toBeGreaterThan(1);
     expect(s.universe).toBeNull();
+  });
+});
+
+describe('chisel (Stone Age)', () => {
+  const c = cfg<ChiselParams>('stone');
+  it('taps knock off corners until the rock is a wheel; overflow carries over', () => {
+    const s = chisel.init(c);
+    const per = c.roundAt - c.startSides;
+    for (let i = 0; i < per; i++) chisel.act(s, c, { type: 'tap' }, ctx());
+    expect(s.made).toBe(1);
+    expect(s.sides).toBe(c.startSides);
+    s.wheels = 1000;
+    chisel.act(s, c, { type: 'buy', id: 'sharp' }, ctx());
+    expect(cornersPerTap(c, s)).toBe(2);
+  });
+
+  it('automatic chipping makes wheels over time', () => {
+    const s = chisel.init(c);
+    s.owned.helper = 9;
+    run(chisel, s, c, 60);
+    expect(s.made).toBe(Math.floor((9 * 60) / (c.roundAt - c.startSides)));
   });
 });
