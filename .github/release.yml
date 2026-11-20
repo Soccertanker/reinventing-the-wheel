@@ -1,0 +1,7 @@
+# Groups the auto-generated GitHub Release notes. Dependabot labels its PRs automatically.
+changelog:
+  categories:
+    - title: Dependencies
+      labels: [dependencies]
+    - title: Changes
+      labels: ['*']

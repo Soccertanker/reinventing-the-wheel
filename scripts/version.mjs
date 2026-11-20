@@ -40,6 +40,21 @@ export function computeVersion({ describe, commitCount, sha, dirty }) {
 }
 
 /**
+ * Next release version for a bump, from the latest release tag (or none).
+ * @param {string | null} latestTag e.g. "v1.2.3"
+ * @param {'patch' | 'minor' | 'major'} bump
+ */
+export function nextVersion(latestTag, bump) {
+  const m = latestTag ? /^v(\d+)\.(\d+)\.(\d+)$/.exec(latestTag) : ['', '0', '0', '0'];
+  if (!m) throw new Error(`Unexpected tag: ${latestTag}`);
+  const [maj, min, pat] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  if (bump === 'major') return `${maj + 1}.0.0`;
+  if (bump === 'minor') return `${maj}.${min + 1}.0`;
+  if (bump === 'patch') return `${maj}.${min}.${pat + 1}`;
+  throw new Error(`Unknown bump: ${String(bump)}`);
+}
+
+/**
  * @param {string[]} args
  * @param {string} cwd
  */
@@ -67,5 +82,18 @@ export function readVersion(cwd = fileURLToPath(new URL('..', import.meta.url)))
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  process.stdout.write(JSON.stringify(readVersion()) + '\n');
+  const [flag, bump] = process.argv.slice(2);
+  if (flag === '--next') {
+    // Prints the next release version, e.g. `node scripts/version.mjs --next minor` -> 0.2.0
+    const root = fileURLToPath(new URL('..', import.meta.url));
+    let latest = null;
+    try {
+      latest = git(['describe', '--tags', '--abbrev=0', '--match', 'v[0-9]*.[0-9]*.[0-9]*'], root);
+    } catch {
+      // no release yet
+    }
+    process.stdout.write(nextVersion(latest, /** @type {'patch' | 'minor' | 'major'} */ (bump)) + '\n');
+  } else {
+    process.stdout.write(JSON.stringify(readVersion()) + '\n');
+  }
 }

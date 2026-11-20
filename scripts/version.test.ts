@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeVersion } from './version.mjs';
+import { computeVersion, nextVersion } from './version.mjs';
 
 const sha = '9c6b2d3aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 
@@ -38,5 +38,22 @@ describe('computeVersion', () => {
 
   it('rejects unexpected describe output', () => {
     expect(() => computeVersion({ describe: 'release-1', commitCount: 1, sha, dirty: false })).toThrow();
+  });
+});
+
+describe('nextVersion', () => {
+  it('bumps patch, minor and major', () => {
+    expect(nextVersion('v1.2.3', 'patch')).toBe('1.2.4');
+    expect(nextVersion('v1.2.3', 'minor')).toBe('1.3.0');
+    expect(nextVersion('v1.2.3', 'major')).toBe('2.0.0');
+  });
+
+  it('starts from 0.0.0 when there is no release yet', () => {
+    expect(nextVersion(null, 'minor')).toBe('0.1.0');
+  });
+
+  it('rejects bad input', () => {
+    expect(() => nextVersion('v1.2', 'patch')).toThrow();
+    expect(() => nextVersion('v1.2.3', 'huge' as 'patch')).toThrow();
   });
 });

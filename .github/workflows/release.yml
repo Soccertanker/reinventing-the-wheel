@@ -1,0 +1,92 @@
+name: Release
+
+# Two ways to cut a release (both end with the same build, deploy and GitHub Release):
+#   1. Actions tab -> Release -> Run workflow -> choose patch/minor/major (tags main for you)
+#   2. git tag v1.2.3 && git push origin v1.2.3
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump from the latest release tag
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  tag:
+    name: Tag release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # push the tag
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - id: tag
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            echo "tag=$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"   # tag pushed by hand: use it
+            exit 0
+          fi
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "::error::Releases are cut from main only (got $GITHUB_REF)"; exit 1
+          fi
+          TAG="v$(node scripts/version.mjs --next "$BUMP")"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "$TAG"
+          # Tags pushed with GITHUB_TOKEN don't trigger workflows, so this won't start a second release.
+          git push origin "$TAG"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Releasing **$TAG**" >> "$GITHUB_STEP_SUMMARY"
+
+  # Same lint/test/build/package/deploy jobs as every PR, built from the tag and deployed to production.
+  build:
+    name: Build
+    needs: tag
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: refs/tags/${{ needs.tag.outputs.tag }}
+      release: true
+    secrets: inherit
+
+  publish:
+    name: Publish GitHub Release
+    needs: [tag, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the release
+    env:
+      TAG: ${{ needs.tag.outputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: web-dist
+          path: web
+      - uses: actions/download-artifact@v5
+        with:
+          name: android-debug-apk
+          path: apk
+      - name: Package files
+        run: |
+          (cd web && zip -qr "../reinventing-the-wheel-$TAG-web.zip" .)
+          mv apk/*.apk "reinventing-the-wheel-$TAG-debug.apk"
+      # Notes are generated from merged PR titles since the previous tag, grouped by .github/release.yml.
+      - name: Create release
+        run: |
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --title "$TAG" --generate-notes \
+            "reinventing-the-wheel-$TAG-web.zip" "reinventing-the-wheel-$TAG-debug.apk"
