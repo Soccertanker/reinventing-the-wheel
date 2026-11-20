@@ -17,12 +17,19 @@
   </head>
   <body>
     <main id="app">
-      <h1>Reinventing the Wheel</h1>
-      <p class="era" id="era"></p>
-      <p class="count"><span id="wheels">0</span> wheels</p>
-      <p class="rate"><span id="wps">0</span> / sec</p>
-      <button id="reinvent" class="big">Reinvent the wheel</button>
-      <ul id="producers"></ul>
+      <header>
+        <h1>Reinventing the Wheel</h1>
+        <p class="muted small" id="lifetime"></p>
+        <nav id="tabs"></nav>
+      </header>
+      <section class="era-head">
+        <h2 id="era-name"></h2>
+        <p class="muted" id="era-tagline"></p>
+        <div id="goal"><small id="goal-label"></small></div>
+        <small class="bonus" id="bonus"></small>
+      </section>
+      <section id="view"></section>
+      <ul id="log" aria-live="polite"></ul>
     </main>
     <footer>v<span id="version"></span></footer>
     <script type="module" src="/src/ui/main.ts"></script>
