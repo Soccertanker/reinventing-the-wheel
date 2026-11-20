@@ -50,7 +50,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
       - run: npm ci
       - run: npm run android:sync
       - name: Assemble debug APK
