@@ -8,3 +8,9 @@
   Cache-Control: no-cache
 /index.html
   Cache-Control: no-cache
+
+# The service worker and manifest must be revalidated, or updates get stuck behind the cache.
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache

@@ -2,6 +2,7 @@ import { eras } from '../core/eras';
 import { advance, buy, costOf, reinvent, wheelsPerSecond } from '../core/sim';
 import type { GameState } from '../core/state';
 import { hapticTap, legacyStore, store } from '../platform';
+import { registerServiceWorker } from '../platform/pwa';
 import { loadGame, saveGame } from '../platform/saveStore';
 
 const era = eras[0]!;
@@ -61,3 +62,5 @@ setInterval(persist, 5000);
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') persist();
 });
+
+registerServiceWorker();
