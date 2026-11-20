@@ -24,3 +24,9 @@ Idle game about reinventing the wheel. Mostly a vehicle for a web + Google Play 
 
 ## Changing the save format
 See the comment at the top of `src/core/save.ts`. Bump the schema, add a migration and add a fixture test.
+
+## Web deploys (Cloudflare Pages)
+- Merge to `main` → production: https://reinventing-the-wheel.pages.dev
+- Every PR from this repo → a preview URL, linked as "View deployment" on the PR
+- Rollback: Cloudflare dashboard → Workers & Pages → reinventing-the-wheel → Deployments → pick one → Rollback
+- Needs repo secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit only) and `CLOUDFLARE_ACCOUNT_ID`
