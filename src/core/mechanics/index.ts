@@ -1,5 +1,6 @@
 import type { MechanicState } from '../state';
 import { assembly } from './assembly';
+import { chisel } from './chisel';
 import { cosmos } from './cosmos';
 import { lab } from './lab';
 import { producers } from './producers';
@@ -7,7 +8,7 @@ import { training } from './training';
 import type { Mechanic } from './types';
 
 /** Every era mechanic. An era's content JSON picks one by id. */
-export const mechanics = { producers, assembly, lab, training, cosmos } as const;
+export const mechanics = { producers, chisel, assembly, lab, training, cosmos } as const;
 
 export type MechanicId = keyof typeof mechanics;
 

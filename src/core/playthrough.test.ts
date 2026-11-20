@@ -3,13 +3,14 @@
  * Fails if any era can't be finished, and prints how long each era took (pacing).
  */
 import { describe, expect, it } from 'vitest';
-import { act, advanceBy, newGame } from './engine';
+import { act, advanceBy, goalFor, newGame, reinvent } from './engine';
 import { eras } from './eras';
 import type { Action } from './mechanics/types';
 import { machineCost, stokerCost, type AssemblyParams, type AssemblyState } from './mechanics/assembly';
 import { equipmentCost, studentCost, type LabParams, type LabState } from './mechanics/lab';
 import { producerCost, type ProducersParams, type ProducersState } from './mechanics/producers';
 import { gpuCost, trainingWork, type TrainingParams, type TrainingState } from './mechanics/training';
+import { upgradeCost, type ChiselParams, type ChiselState } from './mechanics/chisel';
 import { pumpCost, type CosmosParams, type CosmosState } from './mechanics/cosmos';
 import type { GameState } from './state';
 
@@ -18,16 +19,25 @@ const cfg = <T>(id: string) => eras.find((e) => e.id === id)?.config as T;
 /** Actions a reasonably attentive player might take this second. */
 function botActions(s: GameState): Action[] {
   const id = s.currentEra;
+  const mech = eras.find((e) => e.id === id)?.mechanic;
   const st = s.eras[id];
   const out: Action[] = [];
-  if (id === 'stone') {
+  if (mech === 'chisel') {
+    const c = cfg<ChiselParams>(id);
+    const x = st as ChiselState;
+    out.push({ type: 'tap' }, { type: 'tap' }, { type: 'tap' });
+    const affordable = c.upgrades.filter((u) => upgradeCost(u, x) <= x.wheels && (u.max === undefined || (x.owned[u.id] ?? 0) < u.max));
+    const best = affordable.sort((a, b) => upgradeCost(a, x) - upgradeCost(b, x))[0];
+    if (best) out.push({ type: 'buy', id: best.id });
+  }
+  if (mech === 'producers') {
     const c = cfg<ProducersParams>(id);
     const x = st as ProducersState;
     out.push({ type: 'click' }, { type: 'click' }, { type: 'click' });
     const best = [...c.producers].filter((p) => producerCost(p, x) <= x.wheels).sort((a, b) => b.wheelsPerSecond / producerCost(b, x) - a.wheelsPerSecond / producerCost(a, x))[0];
     if (best) out.push({ type: 'buy', id: best.id });
   }
-  if (id === 'industrial') {
+  if (mech === 'assembly') {
     const c = cfg<AssemblyParams>(id);
     const x = st as AssemblyState;
     if (x.pressure < 60) out.push({ type: 'shovel' }, { type: 'shovel' });
@@ -39,7 +49,7 @@ function botActions(s: GameState): Action[] {
     const target = lowStock ?? c.stages.at(-1) ?? cheapest[0];
     if (target && machineCost(target, x) <= x.wheels) out.push({ type: 'buyMachine', stage: target.id });
   }
-  if (id === 'lab') {
+  if (mech === 'lab') {
     const c = cfg<LabParams>(id);
     const x = st as LabState;
     // Human-ish hill climbing: try a nudge around the best result so far.
@@ -51,7 +61,7 @@ function botActions(s: GameState): Action[] {
     if (studentCost(c, x) <= x.grants) out.push({ type: 'hireStudent' });
     else if (x.students >= 5 && equipmentCost(c, x) <= x.grants) out.push({ type: 'buyEquipment' });
   }
-  if (id === 'supercomputer') {
+  if (mech === 'training') {
     const c = cfg<TrainingParams>(id);
     const x = st as TrainingState;
     if (gpuCost(c, x) <= x.wheels) out.push({ type: 'buyGpu' });
@@ -62,7 +72,7 @@ function botActions(s: GameState): Action[] {
       out.push({ type: 'dataset', id: 'photos' }, { type: 'size', value: size }, { type: 'alignment', value: 25 }, { type: 'train' });
     }
   }
-  if (id === 'cosmic') {
+  if (mech === 'cosmos') {
     const c = cfg<CosmosParams>(id);
     const x = st as CosmosState;
     out.push({ type: 'pi', value: 3.1416 }, { type: 'gravity', value: 0 });
@@ -97,5 +107,18 @@ describe('playthrough', () => {
     });
     console.log(`Bot playthrough (simulated):\n  ${report.join('\n  ')}\n  total: ${(t / 60).toFixed(1)} min`);
     expect(s.completed).toEqual(eras.map((e) => e.id));
+
+    // New Game+: the second loop should be faster despite bigger goals.
+    s = reinvent(s, eras);
+    let t2 = 0;
+    for (; t2 < limit && s.completed.length < eras.length; t2++) {
+      for (const a of botActions(s)) s = act(s, eras, s.currentEra, a);
+      s = advanceBy(s, eras, 1000);
+      const next = eras.find((e) => s.unlocked.includes(e.id) && !s.completed.includes(e.id));
+      if (next) s = { ...s, currentEra: next.id };
+    }
+    console.log(`  reinvention #1 (goals ×${goalFor(s, eras[0]!) / eras[0]!.goal.made}): ${(t2 / 60).toFixed(1)} min`);
+    expect(s.completed.length).toBe(eras.length);
+    expect(t2).toBeLessThan(t);
   });
 });

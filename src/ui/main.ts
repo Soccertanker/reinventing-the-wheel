@@ -1,4 +1,19 @@
-import { act, advance, advanceBy, bonusFor, hydrate, lifetimeWheels, MAX_OFFLINE_MS, newGame, switchEra } from '../core/engine';
+import {
+  act,
+  advance,
+  advanceBy,
+  allComplete,
+  bonusFor,
+  eraTitle,
+  goalFor,
+  hydrate,
+  lifetimeWheels,
+  MAX_OFFLINE_MS,
+  newGame,
+  reinvent,
+  switchEra,
+} from '../core/engine';
+import { meta } from '../core/meta';
 import { eras, type Era } from '../core/eras';
 import type { GameState } from '../core/state';
 import { hapticTap, legacyStore, store } from '../platform';
@@ -30,6 +45,25 @@ const bonusEl = $('bonus');
 const lifetime = $('lifetime');
 const viewRoot = $('view');
 const logList = $<HTMLUListElement>('log');
+const loopEl = $('loop');
+const reinventInfo = h('p', { class: 'muted' });
+const reinventBox = h(
+  'div',
+  { class: 'panel reinvent hidden' },
+  h('strong', {}, 'The wheel is complete.'),
+  reinventInfo,
+  h('button', {
+    class: 'big',
+    onclick: () => {
+      if (!confirm('Start over from the Stone Age with a permanent multiplier?')) return;
+      hapticTap();
+      state = reinvent(state, eras);
+      mountedEra = '';
+      persist();
+    },
+  }, meta.button),
+);
+$('view').before(reinventBox);
 
 if (awayMs > 60_000 && gained >= 1) {
   const capped = awayMs > MAX_OFFLINE_MS ? ' (offline progress is capped at 24h)' : '';
@@ -59,7 +93,7 @@ function mountEra(era: Era) {
   mountedEra = era.id;
   document.documentElement.style.setProperty('--accent', era.accent);
   tabButtons.find((t) => t.era.id === era.id)?.b.scrollIntoView({ block: 'nearest', inline: 'center' });
-  setText(eraName, era.name);
+  setText(eraName, eraTitle(state, era));
   setText(tagline, era.tagline);
 }
 
@@ -94,19 +128,27 @@ function render() {
   const era = eras.find((e) => e.id === state.currentEra) ?? eras[0];
   if (!era) return;
   if (era.id !== mountedEra) mountEra(era);
+  setText(eraName, eraTitle(state, era));
   const st = state.eras[era.id];
   if (st && view) view.update(st, bonusFor(state, eras, era));
   for (const { era: e, b } of tabButtons) {
     const unlocked = state.unlocked.includes(e.id);
-    setText(b, unlocked ? `${state.completed.includes(e.id) ? '✓ ' : ''}${e.name}` : '???');
+    setText(b, unlocked ? `${state.completed.includes(e.id) ? '✓ ' : ''}${eraTitle(state, e)}` : '???');
     b.disabled = !unlocked;
     b.classList.toggle('on', e.id === era.id);
     b.classList.toggle('new', unlocked && (state.eras[e.id]?.made ?? 0) === 0 && e.id !== era.id);
   }
   const made = st?.made ?? 0;
   const done = state.completed.includes(era.id);
-  setText(goalLabel, done ? `✓ ${era.goal.label}` : `${era.goal.label}: ${fmt(made)} / ${fmt(era.goal.made)}`);
-  goalBar.set(made / era.goal.made, done ? 'done' : '');
+  const goal = goalFor(state, era);
+  const label = state.reinventions ? `${era.goal.label.replace(/[\d,.]+/, fmt(goal))}` : era.goal.label;
+  setText(goalLabel, done ? `✓ ${label}` : `${label}: ${fmt(made)} / ${fmt(goal)}`);
+  goalBar.set(made / goal, done ? 'done' : '');
+  // New Game+ offer once every era is complete.
+  const canReinvent = allComplete(state, eras);
+  reinventBox.classList.toggle('hidden', !canReinvent);
+  if (canReinvent) setText(reinventInfo, `Start over from the Stone Age. Everything runs ×${meta.loopMultiplier} faster forever; goals grow ×${meta.goalGrowth}.`);
+  setText(loopEl, state.reinventions ? `Reinvention #${state.reinventions} · everything ×${fmt(meta.loopMultiplier ** state.reinventions)}` : '');
   const bonus = bonusFor(state, eras, era);
   setText(bonusEl, bonus > 1 ? `Ancestral know-how: everything here runs ×${+bonus.toFixed(2)} faster` : '');
   setText(lifetime, `${fmt(lifetimeWheels(state))} wheels reinvented, all-time`);

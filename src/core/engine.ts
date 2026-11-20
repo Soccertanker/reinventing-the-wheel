@@ -6,7 +6,8 @@
  */
 import type { Era } from './eras';
 import type { Action, Ctx } from './mechanics/types';
-import { makeRng } from './rng';
+import { meta as defaultMeta, type Meta } from './meta';
+import { makeRng, pick } from './rng';
 import { CURRENT_SCHEMA_VERSION, type GameState, type MechanicState } from './state';
 
 export const TICK_MS = 250;
@@ -28,8 +29,43 @@ export function newGame(eras: readonly Era[], now: number, seed = (now ^ 0x5eed)
     eras: { [first.id]: first.impl.init(first.config) },
     log: [],
     logSeq: 0,
+    reinventions: 0,
+    pastWheels: 0,
   };
   addLog(s, first.id, first.intro);
+  return s;
+}
+
+/** Era goal for the current loop (grows with each reinvention). */
+export function goalFor(s: GameState, era: Era, meta: Meta = defaultMeta): number {
+  return Math.ceil(era.goal.made * meta.goalGrowth ** s.reinventions);
+}
+
+/** "Neo-Stone Age", "Hyper-Stone Age", ... after reinventions. */
+export function eraTitle(s: GameState, era: Era, meta: Meta = defaultMeta): string {
+  if (!s.reinventions) return era.name;
+  const n = s.reinventions - 1;
+  const prefix = meta.prefixes[n % meta.prefixes.length] ?? '';
+  const cycle = Math.floor(n / meta.prefixes.length);
+  return `${prefix}${era.name}${cycle ? ` ${cycle + 1}` : ''}`;
+}
+
+export const allComplete = (s: GameState, eras: readonly Era[]) => eras.every((e) => s.completed.includes(e.id));
+
+/** New Game+: start over from the first era with a permanent multiplier. Only when everything is done. */
+export function reinvent(state: GameState, eras: readonly Era[], meta: Meta = defaultMeta): GameState {
+  const first = eras[0];
+  if (!first || !allComplete(state, eras)) return state;
+  const s = structuredClone(state);
+  s.pastWheels = lifetimeWheels(state);
+  s.reinventions++;
+  s.unlocked = [first.id];
+  s.completed = [];
+  s.eras = { [first.id]: first.impl.init(first.config) };
+  s.currentEra = first.id;
+  const rng = makeRng(s.rngSeed);
+  addLog(s, first.id, pick(() => rng.next(), meta.restarts).replace('{n}', String(s.reinventions)));
+  s.rngSeed = rng.seed;
   return s;
 }
 
@@ -39,6 +75,8 @@ export function newGame(eras: readonly Era[], now: number, seed = (now ^ 0x5eed)
  */
 export function hydrate(state: GameState, eras: readonly Era[]): GameState {
   const s = structuredClone(state);
+  s.reinventions ??= 0;
+  s.pastWheels ??= 0;
   const known = new Set(eras.map((e) => e.id));
   for (const e of eras) {
     if (s.unlocked.includes(e.id)) s.eras[e.id] = { ...e.impl.init(e.config), ...s.eras[e.id] } as MechanicState;
@@ -61,12 +99,13 @@ function addLog(s: GameState, era: string, msg: string) {
 }
 
 /** Product of bonuses from completed eras that come before this one. */
-export function bonusFor(s: GameState, eras: readonly Era[], era: Era): number {
-  return eras.filter((e) => e.order < era.order && s.completed.includes(e.id)).reduce((b, e) => b * e.bonus, 1);
+export function bonusFor(s: GameState, eras: readonly Era[], era: Era, meta: Meta = defaultMeta): number {
+  const loops = meta.loopMultiplier ** s.reinventions;
+  return eras.filter((e) => e.order < era.order && s.completed.includes(e.id)).reduce((b, e) => b * e.bonus, loops);
 }
 
 export function lifetimeWheels(s: GameState): number {
-  return Object.values(s.eras).reduce((sum, e) => sum + e.made, 0);
+  return s.pastWheels + Object.values(s.eras).reduce((sum, e) => sum + e.made, 0);
 }
 
 function ctxFor(s: GameState, eras: readonly Era[], era: Era, rng: () => number): Ctx {
@@ -77,11 +116,12 @@ function ctxFor(s: GameState, eras: readonly Era[], era: Era, rng: () => number)
 function checkProgress(s: GameState, eras: readonly Era[]) {
   eras.forEach((era, i) => {
     const st = s.eras[era.id];
-    if (!st || s.completed.includes(era.id) || st.made < era.goal.made) return;
+    if (!st || s.completed.includes(era.id) || st.made < goalFor(s, era)) return;
     s.completed.push(era.id);
     const next = eras[i + 1];
     if (!next) {
       addLog(s, era.id, 'You have reinvented the wheel in every way it can be reinvented. It is still a wheel. It was always a wheel.');
+      addLog(s, era.id, defaultMeta.endings[s.logSeq % defaultMeta.endings.length] ?? '');
       return;
     }
     addLog(s, era.id, `Goal reached! Everything in later eras now runs ${era.bonus}x faster. A new era awaits: ${next.name}.`);

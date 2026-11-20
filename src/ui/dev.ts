@@ -2,7 +2,7 @@
  * Dev/test panel, shown when the URL has ?dev. Lets testers skip the grind on preview builds:
  * time warp, free wheels, finish an era, unlock everything, reset.
  */
-import { advanceBy } from '../core/engine';
+import { advanceBy, goalFor } from '../core/engine';
 import type { Era } from '../core/eras';
 import type { GameState } from '../core/state';
 import { h } from './dom';
@@ -46,7 +46,7 @@ export function mountDev(eras: readonly Era[], hooks: DevHooks): { warp: () => n
             const e = era();
             const st = e && s.eras[e.id];
             if (e && st) {
-              const n = Math.ceil(e.goal.made / 10);
+              const n = Math.ceil(goalFor(s, e) / 10);
               st.wheels += n;
               st.made += n;
             }
@@ -57,7 +57,7 @@ export function mountDev(eras: readonly Era[], hooks: DevHooks): { warp: () => n
           mutate((s) => {
             const e = era();
             const st = e && s.eras[e.id];
-            if (e && st) st.made = Math.max(st.made, e.goal.made);
+            if (e && st) st.made = Math.max(st.made, goalFor(s, e));
           }),
       }, 'finish era'),
     ),
@@ -71,7 +71,7 @@ export function mountDev(eras: readonly Era[], hooks: DevHooks): { warp: () => n
             mutate((s) => {
               const e = eras.find((x) => s.unlocked.includes(x.id) && !s.completed.includes(x.id));
               const st = e && s.eras[e.id];
-              if (e && st) st.made = Math.max(st.made, e.goal.made);
+              if (e && st) st.made = Math.max(st.made, goalFor(s, e));
             });
           }
         },

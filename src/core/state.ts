@@ -1,4 +1,4 @@
-export const CURRENT_SCHEMA_VERSION = 2;
+export const CURRENT_SCHEMA_VERSION = 3;
 
 /** Every mechanic's per-era state has at least these. Everything else is mechanic-specific. */
 export interface MechanicState {
@@ -28,4 +28,8 @@ export interface GameState {
   eras: Record<string, MechanicState>;
   log: LogEntry[];
   logSeq: number;
+  /** completed full playthroughs (New Game+ loops) */
+  reinventions: number;
+  /** wheels made in earlier loops (so the all-time total survives a reinvention) */
+  pastWheels: number;
 }
