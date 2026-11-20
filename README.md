@@ -30,3 +30,12 @@ See the comment at the top of `src/core/save.ts`. Bump the schema, add a migrati
 - Every PR from this repo → a preview URL, linked as "View deployment" on the PR
 - Rollback: Cloudflare dashboard → Workers & Pages → reinventing-the-wheel → Deployments → pick one → Rollback
 - Needs repo secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit only) and `CLOUDFLARE_ACCOUNT_ID`
+
+## Versioning
+Versions come from git tags (`scripts/version.mjs`, used by both the web build and Gradle). `package.json` version is unused.
+- Tagged commit `v1.2.3` → `1.2.3`
+- Commits after a tag → `1.2.4-dev.3+g<sha>` (prerelease of the next patch)
+- Android `versionCode` = commit count on `main` (always increases: `main` is linear)
+- `npm run version:show` prints the current values. The version is shown in the in-game footer.
+
+To cut a release: `git tag v0.2.0 && git push origin v0.2.0` on `main`.
