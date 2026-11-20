@@ -26,8 +26,12 @@ Idle game about reinventing the wheel. Mostly a vehicle for a web + Google Play 
 See the comment at the top of `src/core/save.ts`. Bump the schema, add a migration and add a fixture test.
 
 ## Web deploys (Cloudflare Pages)
-- Merge to `main` → production: https://reinventing-the-wheel.pages.dev
-- Every PR from this repo → a preview URL, linked as "View deployment" on the PR
+| Trigger | Environment | URL |
+|---|---|---|
+| Release (see below) | production | https://reinventing-the-wheel.pages.dev |
+| Merge to `main` | staging | https://staging.reinventing-the-wheel.pages.dev |
+| Pull request | preview | `https://<branch>.reinventing-the-wheel.pages.dev` (linked as "View deployment" on the PR) |
+
 - Rollback: Cloudflare dashboard → Workers & Pages → reinventing-the-wheel → Deployments → pick one → Rollback
 - Needs repo secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit only) and `CLOUDFLARE_ACCOUNT_ID`
 
@@ -38,4 +42,11 @@ Versions come from git tags (`scripts/version.mjs`, used by both the web build a
 - Android `versionCode` = commit count on `main` (always increases: `main` is linear)
 - `npm run version:show` prints the current values. The version is shown in the in-game footer.
 
-To cut a release: `git tag v0.2.0 && git push origin v0.2.0` on `main`.
+## Releasing
+Actions → **Release** → Run workflow → pick `patch` / `minor` / `major`. This:
+1. tags `main` with the next version (`npm run version:show` shows the current one; `node scripts/version.mjs --next minor` previews the next)
+2. runs the full CI build from the tag (so the version is exactly `X.Y.Z`)
+3. deploys it to production
+4. publishes a GitHub Release with notes generated from merged PR titles, plus the web zip and debug APK
+
+Pushing a tag by hand (`git tag v1.2.3 && git push origin v1.2.3`) runs steps 2–4.

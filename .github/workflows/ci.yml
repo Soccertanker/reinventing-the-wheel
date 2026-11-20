@@ -4,11 +4,23 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Called by release.yml to build and ship a tagged release with the same jobs.
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to build (the release tag)
+        type: string
+        required: true
+      release:
+        description: Deploy to production
+        type: boolean
+        default: false
 
-# A new push to the same PR/branch cancels the older, now-irrelevant run.
+# A new push to the same PR/branch cancels the older, now-irrelevant run. Releases are never cancelled.
+# (github.workflow is the caller's name when called, so releases get their own group.)
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !inputs.release }}
 
 permissions:
   contents: read
@@ -25,6 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ inputs.ref }}
           fetch-depth: 0 # full history + tags: needed by scripts/version.mjs
       - uses: ./.github/actions/setup
       - run: npm run lint
@@ -47,6 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ inputs.ref }}
           fetch-depth: 0 # Gradle reads the version via scripts/version.mjs
       # node_modules is still needed: the Android project links @capacitor/android from it.
       - uses: ./.github/actions/setup
@@ -82,17 +96,22 @@ jobs:
     # Secrets aren't available to fork or Dependabot PRs; skip rather than fail.
     if: >-
       github.actor != 'dependabot[bot]' &&
-      (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+      (inputs.release || github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Shows a "View deployment" link on the PR/commit; main = production, everything else = preview.
+    # Where each build goes (shown as a "View deployment" link on the PR/commit):
+    #   release tag -> production   https://reinventing-the-wheel.pages.dev
+    #   push to main -> staging     https://staging.reinventing-the-wheel.pages.dev
+    #   pull request -> preview     https://<branch>.reinventing-the-wheel.pages.dev
+    # ("main" is the Cloudflare production branch name, so only releases deploy with it.)
     environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      name: ${{ inputs.release && 'production' || (github.event_name == 'push' && 'staging' || 'preview') }}
       url: ${{ steps.deploy.outputs.deployment-url }}
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       PAGES_PROJECT: reinventing-the-wheel
+      PAGES_BRANCH: ${{ inputs.release && 'main' || (github.event_name == 'push' && 'staging' || github.head_ref) }}
     steps:
       # Deploy the exact files the web job built and tested.
       - uses: actions/download-artifact@v5
@@ -111,4 +130,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }} --branch=${{ github.head_ref || github.ref_name }} --commit-hash=${{ github.event.pull_request.head.sha || github.sha }}
+          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }} --branch=${{ env.PAGES_BRANCH }} --commit-hash=${{ github.event.pull_request.head.sha || github.sha }}
