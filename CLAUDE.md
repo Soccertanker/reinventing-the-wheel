@@ -15,6 +15,7 @@ Idle/incremental game built around the literal idiom. The player reinvents a whe
 - TypeScript + Vite. Phaser or PixiJS only if needed; DOM/canvas is fine for an idle game.
 - PWA for web (service worker, offline).
 - Capacitor Android shell wrapping the web build (no Ionic CLI needed).
+- **iOS = the PWA for now** (Safari, Add to Home Screen). No native iOS app: the owner has no Mac/iPhone and isn't paying Apple's $99/yr yet. Keep everything iOS-ready so a native `ios/` project later is config plus one macOS CI job, not a rewrite.
 - Output for Play Store is an **AAB** (not APK). Debug APKs are for sideloading/testing only.
 - Web hosting: Cloudflare Pages and/or itch.io (via `butler`).
 
@@ -23,8 +24,17 @@ Idle/incremental game built around the literal idiom. The player reinvents a whe
 - **Versioned saves.** Save format has a `schemaVersion` and migration functions. Updates must never wipe progress. Test migrations.
 - **Offline-first.** All assets bundled in the Android app. Game state is local.
 - Pure game logic (no DOM) in its own module so it is unit-testable and can simulate offline progress deterministically.
+- **No per-platform duplication.** Write things once and keep platform-specific parts thin:
+  - `src/core/`: pure logic. May not import `platform` or `ui` (lint-enforced).
+  - `src/platform/`: the only code that imports `@capacitor/*` (lint-enforced). Native features (storage, haptics, notifications) go here, through Capacitor plugins that cover Android, iOS and web.
+  - `scripts/version.mjs`: the one version source for web, Gradle and later iOS.
+  - CI: shared setup in `.github/actions/setup`. The web job builds and tests `dist/` once, and platform jobs package that same artifact.
+  - Icons: generated from `assets/icon.svg`.
+- Android builds run only in CI (no local Android SDK).
 
 ## Pipeline goals (build in this order)
+Status: 1–4 done, plus the PWA and the platform layer. 5–6 (Android signing and Play upload) are deferred until the game is worth the $25 Play fee. Next: 7–8, and game content.
+
 1. Repo + scaffold: Vite TS app, Capacitor Android added, runs in browser and emulator/device.
 2. CI (GitHub Actions) on every PR: lint, typecheck, unit tests, web build. Build matrix adds the Android debug build.
 3. Web CD: auto-deploy `main` to hosting, with preview deploys per PR.
