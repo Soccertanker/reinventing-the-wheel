@@ -6,8 +6,8 @@
   "tagline": "Hit rock with rock until it is round.",
   "intro": "You pick up a rock. You have a feeling about this rock. It wants to be round.",
   "goal": {
-    "made": 2000,
-    "label": "Chisel 2,000 stone wheels"
+    "made": 500,
+    "label": "Chisel 500 stone wheels"
   },
   "bonus": 2,
   "accent": "#d9a441",

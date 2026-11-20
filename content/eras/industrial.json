@@ -6,8 +6,8 @@
   "tagline": "Steam, soot, and spokes. Mind the boiler.",
   "intro": "Smoke on the horizon. Someone has built a factory whose only purpose is to reinvent the wheel. It is you. You built it.",
   "goal": {
-    "made": 600,
-    "label": "Assemble 600 iron wheels"
+    "made": 150,
+    "label": "Assemble 150 iron wheels"
   },
   "bonus": 1.5,
   "accent": "#c8693c",
@@ -75,7 +75,7 @@
     "stoker": {
       "name": "Coal Stoker",
       "pressurePerSecond": 2.5,
-      "baseCost": 30,
+      "baseCost": 15,
       "costGrowth": 1.35
     },
     "valveAt": 70,

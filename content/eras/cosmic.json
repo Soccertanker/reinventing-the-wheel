@@ -6,8 +6,8 @@
   "tagline": "Set the constants. Big Bang. Wait for someone, somewhere, to invent the wheel.",
   "intro": "Your model went post-singular and took you with it. You are now a vast intelligence that creates universes. You still want wheels. Some things never change.",
   "goal": {
-    "made": 200000000,
-    "label": "Make the multiverse produce 200 million wheels"
+    "made": 50000000,
+    "label": "Make the multiverse produce 50 million wheels"
   },
   "bonus": 1,
   "accent": "#ff6fb5",

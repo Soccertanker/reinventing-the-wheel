@@ -6,8 +6,8 @@
   "tagline": "Peer-reviewed roundness. p < 0.05.",
   "intro": "You've been awarded a grant to 'fundamentally rethink circular mobility.' The committee loved the slide with the circle on it.",
   "goal": {
-    "made": 3000,
-    "label": "Get 3,000 prototypes past QA"
+    "made": 750,
+    "label": "Get 750 prototypes past QA"
   },
   "bonus": 1.5,
   "accent": "#4fb0c6",
