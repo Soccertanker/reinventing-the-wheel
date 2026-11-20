@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Source for all app icons. Wheel sits inside the central 80% so it survives maskable cropping. -->
+  <rect width="512" height="512" fill="#2b2b2b"/>
+  <g transform="translate(256 256)" stroke="#d9a441" stroke-linecap="round" fill="none">
+    <circle r="150" stroke-width="34"/>
+    <g stroke-width="18">
+      <line x1="0" y1="-140" x2="0" y2="140"/>
+      <line x1="-140" y1="0" x2="140" y2="0"/>
+      <line x1="-99" y1="-99" x2="99" y2="99"/>
+      <line x1="-99" y1="99" x2="99" y2="-99"/>
+    </g>
+    <circle r="34" fill="#d9a441" stroke="none"/>
+  </g>
+</svg>

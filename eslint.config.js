@@ -10,6 +10,10 @@ export default tseslint.config(
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
   {
+    files: ['sw/**/*.js'],
+    languageOptions: { globals: { ...globals.serviceworker, __PRECACHE__: 'readonly' } },
+  },
+  {
     // Core must stay DOM-free so it is unit-testable and can simulate offline progress.
     files: ['src/core/**/*.ts'],
     languageOptions: { globals: {} },
