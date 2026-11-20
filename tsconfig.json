@@ -16,5 +16,5 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src", "content", "vite.config.ts", "eslint.config.js"]
+  "include": ["src", "content", "vite.config.ts", "eslint.config.js", "capacitor.config.ts"]
 }
