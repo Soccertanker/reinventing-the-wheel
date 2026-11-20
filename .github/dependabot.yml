@@ -5,6 +5,18 @@ updates:
     schedule: { interval: weekly }
     groups:
       dev-deps: { dependency-type: development }
+    ignore:
+      # Keep Node type definitions on the same major as the runtime in .nvmrc.
+      # Bump them manually when .nvmrc changes.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      # TypeScript majors must wait until typescript-eslint supports them
+      # (TS 7 failed CI in #7: typescript-eslint peer range is <6.1).
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly }
+    # One PR for all action bumps instead of one per action.
+    groups:
+      actions: { patterns: ['*'] }
