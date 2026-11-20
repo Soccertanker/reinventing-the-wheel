@@ -1,0 +1,46 @@
+{
+  "genes": 16,
+  "population": 20,
+  "elites": 4,
+  "minRadius": 0.15,
+  "maxRadius": 1,
+  "finish": 30,
+  "maxSeconds": 15,
+  "push": 2,
+  "gravity": 9.8,
+  "terrains": [
+    { "id": "gentle", "name": "Gentle hill", "slope": 6, "text": "A gentle hill. Only the roundest will make it to the bottom." },
+    { "id": "flat", "name": "Nearly flat", "slope": 2, "text": "Barely a slope. Corners are now a death sentence." },
+    { "id": "steep", "name": "Steep hill", "slope": 15, "text": "A steep hill. Lumpy things can tumble down too. Evolution relaxes a bit." },
+    { "id": "cliff", "name": "Cliff", "slope": 45, "text": "A cliff. Everything rolls. Squares thrive. Evolution has given up." }
+  ],
+  "names": [
+    { "min": 0.97, "genus": "Rotundus perfectus" },
+    { "min": 0.9, "genus": "Rotundus" },
+    { "min": 0.8, "genus": "Roundish" },
+    { "min": 0.65, "genus": "Lumpus" },
+    { "min": 0.5, "genus": "Blobbus" },
+    { "min": 0, "genus": "Pointus horribilis" }
+  ],
+  "species": ["minor", "maximus", "vulgaris", "stubbornus", "wobblus", "confusus", "rollii", "squarensis", "lazarus", "gigglus", "darwinii", "ovalis"],
+  "milestones": [
+    { "id": "move", "kind": "distance", "value": 5, "text": "Something rolled 5 metres! The others watched, jealous." },
+    { "id": "half", "kind": "distance", "value": 15, "text": "Halfway down the hill! The blobs are learning that corners hurt." },
+    { "id": "finish", "kind": "finish", "value": 0, "text": "A shape reached the bottom of the hill! Its children will inherit the slope." },
+    { "id": "round90", "kind": "roundness", "value": 0.9, "text": "The best shape is now 90% round. Evolution is onto something." },
+    { "id": "wheel", "kind": "wheel", "value": 0.97, "text": "Evolution has reinvented the wheel. A caveman did it in an afternoon, but sure." }
+  ],
+  "meteor": [
+    "☄️ A meteor wipes out the top half of the population. The survivors are mostly potatoes.",
+    "☄️ Mass extinction! The fittest are gone. Somewhere, a very lumpy blob inherits the earth.",
+    "☄️ BOOM. Natural selection has been replaced by unnatural selection."
+  ],
+  "design": [
+    "🙌 You place a perfect circle among them. Intelligent design detected. Darwin is spinning (like a wheel).",
+    "🙌 A perfect circle descends from the heavens. The scientists among the blobs are furious."
+  ],
+  "pointy": [
+    "💘 Pointy is now attractive. Blobs with corners get more dates. Rolling becomes secondary.",
+    "💘 Sexual selection now favors spikes. This is going to end in stars."
+  ]
+}
