@@ -1,0 +1,23 @@
+{
+  "id": "stone",
+  "name": "Stone Age",
+  "clickYield": 1,
+  "producers": [
+    {
+      "id": "chisel",
+      "name": "Sharper Rock",
+      "description": "A rock for hitting the other rock into a circle.",
+      "baseCost": 10,
+      "costGrowth": 1.15,
+      "wheelsPerSecond": 0.1
+    },
+    {
+      "id": "apprentice",
+      "name": "Cave Apprentice",
+      "description": "Hits rocks. Mostly the right ones.",
+      "baseCost": 100,
+      "costGrowth": 1.15,
+      "wheelsPerSecond": 1
+    }
+  ]
+}
