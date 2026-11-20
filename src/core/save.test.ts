@@ -13,7 +13,23 @@ describe('save', () => {
   // Fixtures: one real save per historical schema version. Add one each time the schema bumps.
   const fixtures: Record<number, unknown> = {
     1: { schemaVersion: 1, wheels: 5, totalWheels: 9, owned: { chisel: 1 }, lastTickAt: 1000 },
-    2: JSON.parse(serialize(newGame(eras, 1000, 3))),
+    // Literal v2 save (multi-era, before New Game+), as written by builds of that schema.
+    2: {
+      schemaVersion: 2,
+      lastTickAt: 1000,
+      pendingMs: 120,
+      rngSeed: 99,
+      currentEra: 'industrial',
+      unlocked: ['stone', 'industrial'],
+      completed: ['stone'],
+      eras: {
+        stone: { wheels: 50, made: 2100, owned: { chisel: 4 } },
+        industrial: { wheels: 3, made: 12, pressure: 40, machines: { smelt: 2 }, stock: { iron: 4 }, stokers: 1, valve: true, explosions: 0, shovels: 9 },
+      },
+      log: [{ seq: 1, era: 'stone', msg: 'hi' }],
+      logSeq: 1,
+    },
+    3: JSON.parse(serialize(newGame(eras, 1000, 3))),
   };
 
   it.each(Object.entries(fixtures))('migrates schema v%s to current and the game runs', (_v, save) => {
@@ -24,6 +40,14 @@ describe('save', () => {
 
   it('has a fixture for every schema version', () => {
     for (let v = 1; v <= CURRENT_SCHEMA_VERSION; v++) expect(fixtures[v]).toBeDefined();
+  });
+
+  it('v2 -> v3 keeps progress and starts with no reinventions', () => {
+    const s = hydrate(migrate(structuredClone(fixtures[2])), eras);
+    expect(s.reinventions).toBe(0);
+    expect(s.pastWheels).toBe(0);
+    expect(s.completed).toEqual(['stone']);
+    expect(s.eras.industrial).toMatchObject({ made: 12, stokers: 1 });
   });
 
   it('v1 -> v2 keeps the Stone Age progress', () => {

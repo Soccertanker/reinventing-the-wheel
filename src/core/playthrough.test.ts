@@ -3,7 +3,7 @@
  * Fails if any era can't be finished, and prints how long each era took (pacing).
  */
 import { describe, expect, it } from 'vitest';
-import { act, advanceBy, newGame } from './engine';
+import { act, advanceBy, goalFor, newGame, reinvent } from './engine';
 import { eras } from './eras';
 import type { Action } from './mechanics/types';
 import { machineCost, stokerCost, type AssemblyParams, type AssemblyState } from './mechanics/assembly';
@@ -97,5 +97,18 @@ describe('playthrough', () => {
     });
     console.log(`Bot playthrough (simulated):\n  ${report.join('\n  ')}\n  total: ${(t / 60).toFixed(1)} min`);
     expect(s.completed).toEqual(eras.map((e) => e.id));
+
+    // New Game+: the second loop should be faster despite bigger goals.
+    s = reinvent(s, eras);
+    let t2 = 0;
+    for (; t2 < limit && s.completed.length < eras.length; t2++) {
+      for (const a of botActions(s)) s = act(s, eras, s.currentEra, a);
+      s = advanceBy(s, eras, 1000);
+      const next = eras.find((e) => s.unlocked.includes(e.id) && !s.completed.includes(e.id));
+      if (next) s = { ...s, currentEra: next.id };
+    }
+    console.log(`  reinvention #1 (goals ×${goalFor(s, eras[0]!) / eras[0]!.goal.made}): ${(t2 / 60).toFixed(1)} min`);
+    expect(s.completed.length).toBe(eras.length);
+    expect(t2).toBeLessThan(t);
   });
 });

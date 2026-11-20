@@ -22,6 +22,8 @@ export const migrations: Record<number, (s: AnySave) => AnySave> = {
     log: [],
     logSeq: 0,
   }),
+  // v2 -> v3: New Game+ ("reinventions") counter
+  2: (s) => ({ ...s, schemaVersion: 3, reinventions: 0, pastWheels: 0 }),
 };
 
 export function serialize(state: GameState): string {
