@@ -1,4 +1,4 @@
-import { act, advance, advanceBy, bonusFor, hydrate, lifetimeWheels, newGame, switchEra } from '../core/engine';
+import { act, advance, advanceBy, bonusFor, hydrate, lifetimeWheels, MAX_OFFLINE_MS, newGame, switchEra } from '../core/engine';
 import { eras, type Era } from '../core/eras';
 import type { GameState } from '../core/state';
 import { hapticTap, legacyStore, store } from '../platform';
@@ -6,14 +6,18 @@ import { registerServiceWorker } from '../platform/pwa';
 import { loadGame, SAVE_KEY, saveGame } from '../platform/saveStore';
 import { devEnabled, mountDev } from './dev';
 import { bar, h, setText } from './dom';
-import { fmt } from './format';
+import { fmt, fmtDuration } from './format';
 import { views } from './views';
 import type { View } from './views/types';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
 let state: GameState = hydrate(await loadGame(store, legacyStore, Date.now(), () => newGame(eras, Date.now())), eras);
+// Offline progress: simulate the time away, then tell the player what happened.
+const awayMs = Math.max(0, Date.now() - state.lastTickAt);
+const before = lifetimeWheels(state);
 state = advance(state, eras, Date.now());
+const gained = lifetimeWheels(state) - before;
 
 $('version').textContent = __APP_VERSION__;
 const tabs = $('tabs');
@@ -26,6 +30,18 @@ const bonusEl = $('bonus');
 const lifetime = $('lifetime');
 const viewRoot = $('view');
 const logList = $<HTMLUListElement>('log');
+
+if (awayMs > 60_000 && gained >= 1) {
+  const capped = awayMs > MAX_OFFLINE_MS ? ' (offline progress is capped at 24h)' : '';
+  const box = h(
+    'div',
+    { class: 'panel welcome', role: 'status' },
+    h('strong', {}, 'Welcome back!'),
+    h('p', {}, `You were away ${fmtDuration(awayMs / 1000)}${capped}. Your eras reinvented ${fmt(gained)} wheels without you.`),
+    h('button', { onclick: () => box.remove() }, 'Nice'),
+  );
+  viewRoot.before(box);
+}
 
 const persist = () => void saveGame(store, state);
 

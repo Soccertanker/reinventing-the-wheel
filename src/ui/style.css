@@ -37,6 +37,8 @@ nav#tabs { display: flex; gap: 4px; overflow-x: auto; padding: 8px 0; scrollbar-
 .era-head { text-align: center; margin: 0.5rem 0; }
 .era-head p { margin: 0.25rem 0; }
 .bonus { color: var(--accent); }
+.welcome { text-align: center; border: 1px solid var(--accent); }
+.welcome p { margin: 0.4rem 0; }
 
 button {
   font: inherit;
