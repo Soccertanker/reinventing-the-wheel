@@ -5,20 +5,49 @@
   "mechanic": "training",
   "tagline": "Train a frontier model to reinvent the wheel. It will take a while.",
   "intro": "You have a GPU, a dream, and a dataset of every wheel ever photographed. Investors are calling it 'Wheel-GPT'. You are calling it 'please work'.",
-  "goal": { "made": 25000, "label": "Have your AI generate 25,000 wheels" },
+  "goal": {
+    "made": 6250,
+    "label": "Have your AI generate 6,250 wheels"
+  },
   "bonus": 1.5,
   "accent": "#9b7bff",
   "params": {
-    "gpu": { "name": "H900 GPU", "baseCost": 25, "costGrowth": 1.18, "flops": 1 },
+    "gpu": {
+      "name": "H900 GPU",
+      "baseCost": 25,
+      "costGrowth": 1.18,
+      "flops": 1
+    },
     "datasets": [
-      { "id": "photos", "name": "Every Wheel Photo Ever Taken", "quality": 0.9, "size": 1 },
-      { "id": "posts", "name": "Wheel-Related Social Media Posts", "quality": 0.55, "size": 0.4 },
-      { "id": "patents", "name": "All 41,000 Wheel Patents", "quality": 0.97, "size": 3 },
-      { "id": "synthetic", "name": "Your Model's Own Output (synthetic)", "quality": 0, "size": 0.2, "synthetic": true }
+      {
+        "id": "photos",
+        "name": "Every Wheel Photo Ever Taken",
+        "quality": 0.9,
+        "size": 1
+      },
+      {
+        "id": "posts",
+        "name": "Wheel-Related Social Media Posts",
+        "quality": 0.55,
+        "size": 0.4
+      },
+      {
+        "id": "patents",
+        "name": "All 41,000 Wheel Patents",
+        "quality": 0.97,
+        "size": 3
+      },
+      {
+        "id": "synthetic",
+        "name": "Your Model's Own Output (synthetic)",
+        "quality": 0,
+        "size": 0.2,
+        "synthetic": true
+      }
     ],
     "minLogSize": 6,
     "maxLogSize": 15,
-    "workScale": 10,
+    "workScale": 4,
     "workExponent": 0.8,
     "trainingShare": 0.8,
     "collapseFactor": 0.85,
