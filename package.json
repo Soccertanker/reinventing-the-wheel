@@ -33,6 +33,8 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.6.2",
-    "@capacitor/core": "^8.6.2"
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/preferences": "^8.0.1"
   }
 }

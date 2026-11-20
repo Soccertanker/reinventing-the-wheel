@@ -15,6 +15,15 @@ export default tseslint.config(
     languageOptions: { globals: {} },
     rules: {
       'no-restricted-globals': ['error', 'window', 'document', 'localStorage', 'navigator'],
+      'no-restricted-imports': ['error', { patterns: ['**/platform', '**/platform/*', '**/ui/*'] }],
+    },
+  },
+  {
+    // Only src/platform may touch Capacitor, so native code paths live in one place.
+    files: ['src/**/*.ts'],
+    ignores: ['src/platform/**', 'src/core/**'],
+    rules: {
+      'no-restricted-imports': ['error', { patterns: ['@capacitor/*'] }],
     },
   },
 );

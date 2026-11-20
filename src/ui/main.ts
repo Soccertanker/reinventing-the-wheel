@@ -1,10 +1,11 @@
 import { eras } from '../core/eras';
 import { advance, buy, costOf, reinvent, wheelsPerSecond } from '../core/sim';
 import type { GameState } from '../core/state';
-import { load, save } from './storage';
+import { hapticTap, legacyStore, store } from '../platform';
+import { loadGame, saveGame } from '../platform/saveStore';
 
 const era = eras[0]!;
-let state: GameState = advance(load(Date.now()), era, Date.now());
+let state: GameState = advance(await loadGame(store, legacyStore, Date.now()), era, Date.now());
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const fmt = (n: number) => Math.floor(n).toLocaleString();
@@ -30,6 +31,7 @@ for (const p of era.producers) {
 }
 
 $('reinvent').addEventListener('click', () => {
+  hapticTap();
   state = reinvent(state, era);
   render();
 });
@@ -54,7 +56,8 @@ function frame() {
 }
 requestAnimationFrame(frame);
 
-setInterval(() => save(state), 5000);
+const persist = () => void saveGame(store, state);
+setInterval(persist, 5000);
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') save(state);
+  if (document.visibilityState === 'hidden') persist();
 });
