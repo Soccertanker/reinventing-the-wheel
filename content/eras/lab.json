@@ -1,0 +1,98 @@
+{
+  "id": "lab",
+  "name": "Modern Lab",
+  "order": 3,
+  "mechanic": "lab",
+  "tagline": "Peer-reviewed roundness. p < 0.05.",
+  "intro": "You've been awarded a grant to 'fundamentally rethink circular mobility.' The committee loved the slide with the circle on it.",
+  "goal": {
+    "made": 3000,
+    "label": "Get 3,000 prototypes past QA"
+  },
+  "bonus": 1.5,
+  "accent": "#4fb0c6",
+  "params": {
+    "knobs": [
+      {
+        "name": "Radius consistency",
+        "low": "lumpy",
+        "high": "pedantic"
+      },
+      {
+        "name": "Spoke count",
+        "low": "one (bold)",
+        "high": "infinite (a disc)"
+      },
+      {
+        "name": "Vibes",
+        "low": "rectangular",
+        "high": "immaculate"
+      }
+    ],
+    "experimentSeconds": 3,
+    "passScore": 88,
+    "noise": 3,
+    "grantPerPoint": 1.5,
+    "student": {
+      "name": "a grad student",
+      "baseCost": 40,
+      "costGrowth": 1.35,
+      "slowdown": 1.6,
+      "jitter": 7
+    },
+    "equipment": {
+      "name": "Lab Equipment",
+      "baseCost": 120,
+      "costGrowth": 1.9,
+      "speedup": 0.82
+    },
+    "passesPerPaper": 10,
+    "fundingPerPaper": 0.25,
+    "driftEverySeconds": 150,
+    "driftAmount": 9,
+    "reviewer2Chance": 0.06,
+    "verdicts": [
+      {
+        "score": 99,
+        "text": "Transcendently round. The committee weeps."
+      },
+      {
+        "score": 95,
+        "text": "Extremely round. Suspiciously round."
+      },
+      {
+        "score": 85,
+        "text": "Round. Passes QA. Ship it."
+      },
+      {
+        "score": 70,
+        "text": "Wheel-adjacent."
+      },
+      {
+        "score": 50,
+        "text": "An oval with ambitions."
+      },
+      {
+        "score": 25,
+        "text": "Technically a shape."
+      },
+      {
+        "score": 0,
+        "text": "This is a brick. Why is this a brick."
+      }
+    ],
+    "reviewer2": [
+      "Reviewer 2 rejected your passing wheel: 'The authors fail to consider the square.'",
+      "Reviewer 2: 'Major revisions. Have you tried making it a triangle? Fewer bumps.'",
+      "Reviewer 2 requests you cite their 1987 paper on ovals. Rejected pending citation.",
+      "Reviewer 2: 'Novelty is limited. The wheel has been done before.' Fair, honestly."
+    ],
+    "drifts": [
+      "BREAKING: ISO 31-0 has redefined 'round'. All previous wheels are now 'legacy round'.",
+      "A new paper shows wheels were never round, just very confident. Recalibrate.",
+      "The International Bureau of Circles has moved the reference circle 3 mm to the left.",
+      "Funding agency priorities changed. 'Round' now means 'round, but sustainable'."
+    ],
+    "startingGrant": 85
+  }
+}

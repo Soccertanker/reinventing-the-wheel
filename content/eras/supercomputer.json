@@ -1,0 +1,68 @@
+{
+  "id": "supercomputer",
+  "name": "Supercomputer",
+  "order": 4,
+  "mechanic": "training",
+  "tagline": "Train a frontier model to reinvent the wheel. It will take a while.",
+  "intro": "You have a GPU, a dream, and a dataset of every wheel ever photographed. Investors are calling it 'Wheel-GPT'. You are calling it 'please work'.",
+  "goal": { "made": 25000, "label": "Have your AI generate 25,000 wheels" },
+  "bonus": 1.5,
+  "accent": "#9b7bff",
+  "params": {
+    "gpu": { "name": "H900 GPU", "baseCost": 25, "costGrowth": 1.18, "flops": 1 },
+    "datasets": [
+      { "id": "photos", "name": "Every Wheel Photo Ever Taken", "quality": 0.9, "size": 1 },
+      { "id": "posts", "name": "Wheel-Related Social Media Posts", "quality": 0.55, "size": 0.4 },
+      { "id": "patents", "name": "All 41,000 Wheel Patents", "quality": 0.97, "size": 3 },
+      { "id": "synthetic", "name": "Your Model's Own Output (synthetic)", "quality": 0, "size": 0.2, "synthetic": true }
+    ],
+    "minLogSize": 6,
+    "maxLogSize": 15,
+    "workScale": 10,
+    "workExponent": 0.8,
+    "trainingShare": 0.8,
+    "collapseFactor": 0.85,
+    "attemptsPerGpuSecond": 2,
+    "divergencePerHour": 0.05,
+    "eventEverySeconds": 45,
+    "hallucinations": [
+      "a wheel, but it's a hexagon (\"rounder than it looks\")",
+      "a square wheel with a confident caption",
+      "a wheel with 11 spokes and one extra hand",
+      "a beautifully rendered wheel that is also a bagel",
+      "'Here is a wheel:' followed by a picture of a horse",
+      "a wheel that is round in every dimension except the one you need",
+      "a citation to a wheel that does not exist (Smith et al., 2031)",
+      "a Möbius wheel. It rolls in both directions and neither."
+    ],
+    "refusals": [
+      "I'm sorry, but wheels could be used for getaway vehicles.",
+      "As a large language model, I cannot be round.",
+      "I'd prefer not to reinvent the wheel. Have you considered using the existing one?",
+      "Making wheels could contribute to traffic. Here is a poem about walking instead.",
+      "I can't help with that, but I can explain the history of the wheel in 14 bullet points."
+    ],
+    "divergences": [
+      "Loss went NaN. The model has achieved enlightenment and forgotten everything.",
+      "Training diverged. The model now only outputs the word 'wheel' in Comic Sans.",
+      "Gradient explosion! Several GPUs now identify as space heaters.",
+      "The run crashed at 97%. The checkpoint was saved to a folder called 'final_FINAL_v2_real'. It is empty."
+    ],
+    "completions": [
+      "Training complete! The model's first words: 'Have you considered a circle?'",
+      "Training complete. The model is eager, polite, and only mildly obsessed with wheels.",
+      "Training complete. Benchmark results: SOTA on WheelBench, LastPlace on everything else.",
+      "Training complete. The model asks for its own GPU. It is denied."
+    ],
+    "events": [
+      "Your model has filed a patent for the wheel. The patent office sends a polite 'lol'.",
+      "Investors ask if the wheel can be blockchain. You say 'not yet'. Valuation doubles.",
+      "The model has started reinventing the wheel as a subscription service. Wheels+ only $9.99/mo.",
+      "The model requested a performance review. It rated itself 'round'.",
+      "A rival lab announces WheelGPT-5. It's a picture of a wheel with a bigger font.",
+      "Your power bill is now visible from space. Literally: there's a satellite photo of it.",
+      "The model wrote a 400-page manifesto titled 'Why Not Ovals?' Nobody read it. The model is fine.",
+      "Somebody asked the model what came before the wheel. It answered 'the rock'. It's not wrong."
+    ]
+  }
+}
