@@ -1,0 +1,14 @@
+name: Setup
+description: >-
+  Shared setup for every job: Node from .nvmrc (with npm cache) and npm ci.
+  Platform jobs (android, later ios) add only their own toolchain on top.
+  Run actions/checkout (fetch-depth 0) before this.
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v7
+      with:
+        node-version-file: .nvmrc
+        cache: npm
+    - run: npm ci
+      shell: bash
